@@ -1,0 +1,9 @@
+<aspectj>
+  <aspects>
+    <aspect name="io.karchevskiy.camunda.zipkin.CamundaSlueuthContextInjectingAspect"/>
+  </aspects>
+  <weaver>
+    <!-- weave anything -->
+    <include within="*"/>
+  </weaver>
+</aspectj>

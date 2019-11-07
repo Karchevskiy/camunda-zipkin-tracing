@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.karchevskiy.camunda-zipkin-trace</groupId>
+  <artifactId>parent</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>camunda-zipkin-trace</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.source-target.version>11</java.source-target.version>
+    <aspectj.version>1.9.4</aspectj.version>
+    <spring.boot.version>2.1.5.RELEASE</spring.boot.version>
+    <spring-cloud.sleuth.version>2.0.2.RELEASE</spring-cloud.sleuth.version>
+    <camunda-engine.version>7.11.0</camunda-engine.version>
+    <zipkin-brave.version>5.9.0</zipkin-brave.version>
+    <kafka-clients.version>2.3.0</kafka-clients.version>
+  </properties>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.3</version>
+          <configuration>
+            <source>${java.source-target.version}</source>
+            <target>${java.source-target.version}</target>
+            <!-- IMPORTANT -->
+            <useIncrementalCompilation>false</useIncrementalCompilation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>com.nickwongdev</groupId>
+          <artifactId>aspectj-maven-plugin</artifactId>
+          <version>1.12.1</version>
+          <configuration>
+            <!--<showWeaveInfo>true</showWeaveInfo>-->
+            <source>${java.source-target.version}</source>
+            <target>${java.source-target.version}</target>
+            <Xlint>ignore</Xlint>
+            <complianceLevel>${java.source-target.version}</complianceLevel>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <!--<verbose>true</verbose>-->
+            <!--<warn>constructorName,packageDefaultMethod,deprecation,maskedCatchBlocks,unusedLocals,unusedArguments,unusedImport</warn>-->
+          </configuration>
+          <executions>
+            <execution>
+              <!-- IMPORTANT -->
+              <phase>process-sources</phase>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+            </execution>
+          </executions>
+          <dependencies>
+            <dependency>
+              <groupId>org.aspectj</groupId>
+              <artifactId>aspectjtools</artifactId>
+              <version>${aspectj.version}</version>
+            </dependency>
+            <dependency>
+              <groupId>org.aspectj</groupId>
+              <artifactId>aspectjweaver</artifactId>
+              <version>${aspectj.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>${aspectj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${aspectj.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-dependencies</artifactId>
+        <version>${spring.boot.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-sleuth</artifactId>
+        <version>${spring-cloud.sleuth.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.camunda.bpm</groupId>
+        <artifactId>camunda-engine</artifactId>
+        <version>${camunda-engine.version}</version>
+        <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>io.zipkin.brave</groupId>
+        <artifactId>brave-instrumentation-messaging</artifactId>
+        <version>${zipkin-brave.version}</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>io.zipkin.brave</groupId>
+        <artifactId>brave</artifactId>
+        <version>${zipkin-brave.version}</version>
+        <scope>compile</scope>
+        <!--use custom hard-forked kafka-clients for tracing context propagation from kafka client-->
+        <exclusions>
+          <exclusion>
+            <groupId>io.zipkin.brave</groupId>
+            <artifactId>brave-instrumentation-kafka-clients</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-clients</artifactId>
+        <version>${kafka-clients.version}</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <modules>
+    <module>aspect</module>
+    <module>application</module>
+    <module>kafka-clients</module>
+  </modules>
+
+</project>
