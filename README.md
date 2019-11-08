@@ -1,4 +1,4 @@
-# Add tracing trough camunda bpm. Propagate trace context (rest/kafka)
+# Add tracing through camunda bpm. Propagate trace context (rest/kafka)
 
 Alternative to https://github.com/berndruecker/camunda-zipkin-springboot-demo
 
