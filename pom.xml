@@ -17,7 +17,7 @@
     <spring-cloud.sleuth.version>2.0.2.RELEASE</spring-cloud.sleuth.version>
     <camunda-engine.version>7.11.0</camunda-engine.version>
     <zipkin-brave.version>5.9.0</zipkin-brave.version>
-    <kafka-clients.version>2.3.0</kafka-clients.version>
+    <kafka-clients.version>2.6.3</kafka-clients.version>
   </properties>
 
   <build>
